@@ -272,20 +272,24 @@ def add_inventory(request):
                 request, f"{ add_inventory_item } only has { item_object.remain } left")
         else:
 
-            inventory_object = Inventory.objects.create(
-                item_id=item_object.id,
-                user_id=request.user.id,
-                is_in_inventory=True,
-                rating_score=0,
-                comments="",
-                quantity=purchased_quantity
-            )
-            item_list.append(item_object)
-            item_object.remain -= purchased_quantity
+            if inventory_object is None: # not add to inventory, create new item in inventory
+                inventory_object = Inventory.objects.create(
+                    item_id=item_object.id,
+                    user_id=request.user.id,
+                    is_in_inventory=True,
+                    rating_score=0,
+                    comments="",
+                    quantity=purchased_quantity
+                )
+                item_list.append(item_object)
+                item_object.remain -= purchased_quantity
 
-            item_object.save()
-            inventory_object.save()
+                item_object.save()
+                inventory_object.save()
 
-            messages.success(
-                request, f"Add { add_inventory_item } to inventory")
+                messages.success(
+                    request, f"Add { add_inventory_item } to inventory")
+            else: # already have, just add the quantity to that item
+                inventory_object.quantity += purchased_quantity
+                inventory_object.save()
         return redirect("market-page")
