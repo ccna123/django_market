@@ -1,0 +1,15 @@
+<div class="container card">
+    <h1 class="text-center mb-4 mt-3" style="color: #020603;">Customer Review</h1>
+    {% for user in user_data %}  
+        <div class="row">
+            <div class="col-12">
+                <h4>{{ user.user }}<span class="h5" style="margin-left: 2rem;">2023 Mar, 10</span></h4>
+                <h5>{{ user.rating_score }}</h5>
+                <p>
+                    {{ user.comments }}
+                </p>
+                <hr>
+            </div>
+        </div>
+    {% endfor %}
+</div>

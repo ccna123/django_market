@@ -1,0 +1,36 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+    Login
+{% endblock title %}
+
+{% block content %}
+<body>
+    <div class="container card text-center mt-5 text-dark px-5 py-5 w-75 .bg-light.bg-gradient"> 
+
+        <form class="form-signin" method="POST">
+            {% csrf_token %}
+            
+            <h1 class="h3 mb-3 font-weight-normal">
+                Please sign in
+            </h1>
+            <br>
+            <label for="inputUsername" class="sr-only mb-3">
+                User Name
+            </label>
+            <input type="text" id="inputUsername" class="form-control" placeholder="User Name" name="username" required autofocus>
+            <br>
+            <label for="inputPassword" class="sr-only mb-3">
+                Password
+            </label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
+            <br>
+            <div class="checkbox mb-3">
+                <h6>Don't Have an account? </h6>
+                <a class="btn btn-sm btn-secondary" href="{% url 'register-page' %}">Register</a>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+        </form>
+    </div>
+</body>
+{% endblock content %}

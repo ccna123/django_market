@@ -1,0 +1,159 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+Market Page
+{% endblock title %}
+{% block header %}
+<h1 class="m-5 fw-bold">Market</h1>
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+
+  <form class="form-inline my-2 my-lg-0" method="GET">
+    <div class="row">
+      <div class="col-lg-8 col-md-12 my-auto">
+        <input class="form-control mr-sm-2 me-2" type="search" placeholder="Search" aria-label="Search"
+          style=" height: 3rem;" name="search-item">
+      </div>
+      <div class="col-lg-4 col-md-12">
+        <button class="btn btn-success my-2 my-sm-4 w-100" type="submit" style="height: 3rem;">Search</button>
+      </div>
+    </div>
+
+  </form>
+
+  <br><br><br>
+
+  <br><br><br>
+  <div class="row">
+    {% for item in item_per_page %}
+    {% include "main/info_modal.html" %}
+    <div class="col-xl-3 col-lg-4 col-md-3 col-sm-12">
+      {% if item.remain == 0 %}
+      <div class="card disabled text-dark item_card" style="width: 18rem; min-height: 100%;">
+        <img src="{{ item.image_url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.name }}</h5>
+        </div>
+        <hr>
+        <div class="fw-bold text-center h1 price">
+          ${{ item.price_convert }}
+        </div>
+        
+        <div class="container mb-4">
+          <div class="star-widget text-center">
+            <span class="stars">
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+            </span>
+          </div>
+          <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
+        </div>
+        <div class="text-center">
+          <h5>SOLD OUT</h5>
+        </div>
+        <div class="text-center">
+          <form class="info-form py-4" action="{% url 'market-page' %}"  method="POST">
+            {% csrf_token %}
+            <input class="mb-3 pe-none" type="number" name="quantity" id="quantity" min="1" max="999999" value=1>
+            
+            <input type="hidden" name="add_inventory" value="{{ item.name }}">
+            <button type="submit" class="btn btn-secondary w-75 mb-4 fw-bold pe-none">Add Inventory</button>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <form method="post"></form>
+      <div class="card text-dark item_card" style="width: 18rem; min-height: 100%;">
+        <img src="{{ item.image_url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.name }}</h5>
+        </div>
+        <hr>
+        <div class="fw-bold text-center h1 price">
+          ${{ item.price_convert }}
+        </div>
+        
+        <div class="container mb-4">
+          <div class="star-widget text-center">
+            <span class="stars">
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+              <i class="bi bi-star-fill h4"></i>
+            </span>
+          </div>
+          <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
+        </div>
+        <div class="text-center">
+          <h5>Remain: {{ item.remain }}</h5>
+        </div>
+        <div class="text-center">
+          <form class="info-form py-4" method="POST">
+            {% csrf_token %}
+            <input class="mb-3" type="number" name="quantity" id="quantity" min="1" max="999999" value=1>
+            
+            <button type="submit" onclick="window.location.href='/info/{{ item.name }}/'" class="btn btn-success w-75 mb-4 fw-bold" name="get_item_info" value="{{ item.name }}">
+              Info
+            </button>
+            <button type="submit" onclick="window.location.href='/market/'" class="btn btn-success w-75 mb-4 fw-bold" name="add_inventory" value="{{ item.name }}">
+              Add Inventory
+            </button>
+          </form>
+        </div>
+        
+      </div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+
+  </div>
+  <!-- paginator -->
+
+  <nav aria-label="Page navigation example" class="mt-4">
+    <ul class="pagination justify-content-center">
+      {% if item_per_page.has_previous %}
+      <li class="page-item"><a href="?{{ query_params }}&page=1" class="page-link">&laquo First</a></li>
+      <li class="page-item"><a href="?{{ query_params }}&page={{ item_per_page.previous_page_number }}"
+          class="page-link">Previous</a></li>
+      {% endif %}
+
+      {% for index in num_of_page %}
+
+      <li class="page-item">
+        <a href="?{{ query_params }}&page={{ forloop.counter }}" class="page-link">
+          {{ forloop.counter }}
+        </a>
+      </li>
+      {% endfor %}
+
+
+      {% if item_per_page.has_next %}
+      <li class="page-item"><a href="?{{ query_params }}&page={{ item_per_page.next_page_number }}"
+          class="page-link">Next</a></li>
+      <li class="page-item"><a href="?{{ query_params }}&page={{ item_per_page.paginator.num_pages}}"
+          class="page-link">Last &raquo</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+
+
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+  crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="{% static 'main/star_rating.js' %}">
+
+
+</script>
+{% endblock javascript %}

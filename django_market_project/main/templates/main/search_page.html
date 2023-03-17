@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Market Page
+{% endblock title %}
+{% block header %}
+<h1 class="m-5 text-center fw-bold">Search Item</h1>
+{% endblock header %}
+
+{% if search_item %}
+    <p>You searched for {{ search_item }}</p>
+{% else %}
+    <p>Enter the item you want to search</p>
+{% endif %}
+
+{{ query_params }}

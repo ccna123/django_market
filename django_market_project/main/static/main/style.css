@@ -1,0 +1,67 @@
+body{
+    background-image: url("/static/main/img/background.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+.container .star-widget input{
+    display: none;
+}
+
+.star-widget {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    text-align: left;
+}
+
+.star-widget label{
+    font-size: 1.5rem;
+    padding: 0 4px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.star-widget > label:hover::before,
+.star-widget > label:hover ~ label::before{
+    color: gold;
+}
+
+input:checked ~ label{
+    color: gold;
+}
+
+input#rate-1:checked ~ label{
+    color: gold;
+    text-shadow: 0 0 20px gold;
+}
+
+.filled{
+    color: gold;
+}
+
+.price{
+    color: red;
+}
+
+.item_card:hover{
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.card.disabled{
+    cursor: not-allowed !important;
+}
+
+@media (max-width:768px) {
+    .col-sm-12{
+        display: flex;
+        min-width: 100%;
+        justify-content: center;
+        padding-bottom: 3rem;
+    }
+
+
+}
