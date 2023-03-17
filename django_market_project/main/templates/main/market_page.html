@@ -28,7 +28,6 @@ Market Page
   <br><br><br>
   <div class="row">
     {% for item in item_per_page %}
-    {% include "main/info_modal.html" %}
     <div class="col-xl-3 col-lg-4 col-md-3 col-sm-12">
       {% if item.remain == 0 %}
       <div class="card disabled text-dark item_card" style="width: 18rem; min-height: 100%;">
