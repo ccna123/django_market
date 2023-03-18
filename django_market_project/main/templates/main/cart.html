@@ -1,0 +1,44 @@
+<div class="row" id="cart_part">
+  {% for item in item_in_inventory %}
+
+  <div class="col-xl-3 col-lg-4 col-md-3 col-sm-12 my-2">
+    <div class="card text-dark item_card" style="width: 18rem; min-height: 100%;">
+      <img src="{{ item.item.image_url }}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ item.item.name }}</h5>
+      </div>
+      <hr>
+      <div class="fw-bold text-center h1 price">
+        ${{ item.total_convert }}
+      </div>
+      <div class="container mb-4">
+        <div class="star-widget text-center">
+          <span class="stars">
+            <i class="bi bi-star-fill h4"></i>
+            <i class="bi bi-star-fill h4"></i>
+            <i class="bi bi-star-fill h4"></i>
+            <i class="bi bi-star-fill h4"></i>
+            <i class="bi bi-star-fill h4"></i>
+          </span>
+        </div>
+        <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
+      </div>
+      <div class="text-center">
+        <h5>Quantity: {{ item.quantity }}</h5>
+      </div>
+
+      <form class="info-form text-center" method="POST">
+        {% csrf_token %}
+        <button type="submit" onclick="window.location.href='/info/{{ item.item.name }}/'"
+          class="btn btn-secondary w-75 mb-4 my-auto fw-bold" name="get_item_info" value="{{ item.item.name }}">
+          Info
+        </button>
+        <button type="submit" class="buy_btn btn btn-success w-75 mb-4 my-auto fw-bold" name="buy_item"
+          value="{{ item.item.pk }}">Purchase</button>
+        <button type="submit" class="cancel_btn btn btn-danger w-75 mb-4 my-auto fw-bold" name="cancel_item_name"
+          data-item-id="{{ item.item.pk }}">Cancel</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>

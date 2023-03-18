@@ -28,6 +28,10 @@ def market_page(request):
             searched_item = Item.objects.filter(name__contains=search_item)
             item_rating = searched_item.annotate(
                 avg_rating=Avg('inventory__rating_score'))
+            items_name = ", ".join([item.name for item in searched_item])
+            messages.success(request, f"Search result: {items_name}")
+        else:
+            messages.error(request, "Please enter the item you want to search !")
 
         for item in item_rating:
             if item.avg_rating == None:
@@ -53,7 +57,7 @@ def market_page(request):
 
     if request.method == 'POST':
         if "add_inventory" in request.POST:
-            return add_inventory(request)
+            return add_inventory(request, request.POST.get('item_name'))
         elif "get_item_info" in request.POST:
             return info_page(request, request.POST.get("get_item_info"))
 
@@ -123,33 +127,12 @@ def dashboard_page(request):
 
         elif "buy_item" in request.POST:
             buy_item_id = request.POST.get("buy_item")
-            print(buy_item_id)
             return buy_item(request, buy_item_id)
 
-        elif "cancel_item" in request.POST:
-            cancel_item_id = request.POST.get("cancel_item")
-            return cancel_item(request, cancel_item_id)
-
-        return redirect("dashboard-page")
-
-        # item = Item()
-        # inventory = Inventory()
-        # custom_user = CustomUser()
-
-        # if return_goods:
-        #     item_object = Item.objects.get(name=return_goods)
-        #     inventory_object = Inventory.objects.filter(
-        #         user_id=request.user.id).first()
-        #     custom_user_object = CustomUser.objects.filter(
-        #         id=request.user.id).first()
-        #     total_return = item_object.price * inventory_object.quantity
-        #     if item_object:
-        #         item_object.remain += inventory_object.quantity
-        #         custom_user_object.budget += total_return
-        #         custom_user_object.save()
-        #         inventory_object.delete()
-        #         item_object.save()
-        #         return redirect('dashboard-page')
+        elif "cancel_item_name" in request.POST:
+            return cancel_item(request, request.POST.get("cancel_item_name"))
+    print("hahaha")
+    return redirect("dashboard-page")
 
 
 def get_item_and_inventory(item_name):
@@ -217,17 +200,30 @@ def review(request, item_name):
             'comments': request.POST.get('comments')
         })
 
-    print(request.POST)
     return redirect("market-page")
 
 
-def cancel_item(request, cancel_item_id):
-    inventory_object = Inventory.objects.filter(
-        item_id=cancel_item_id, user_id=request.user.id).first()
-    inventory_object.item.remain += inventory_object.quantity
-    inventory_object.item.save()
-    inventory_object.delete()
-    return redirect("dashboard-page")
+def cancel_item(request, cancel_item_pk):
+
+    if request.method == "POST":
+        
+        inventory_object = Inventory.objects.filter(
+            item_id=cancel_item_pk, user_id=request.user.id).first()
+        inventory_object.item.remain += inventory_object.quantity
+        messages.success(request, "Cancel Successfully")
+        inventory_object.item.save()
+        inventory_object.delete()
+
+        item_in_inventory = Inventory.objects.filter(
+            user_id=request.user.id)
+        update_template = render_to_string("main/cart.html",
+                                           {"item_in_inventory": item_in_inventory},
+                                           request=request)
+        return JsonResponse({
+            "success": True,
+            "update_template": update_template
+
+        })
 
 
 def is_enough_in_store(item_object, purchased_quantity):
@@ -257,9 +253,10 @@ def can_buy_item(request, buy_item_id):
     return request.user.budget > inventory_object.get_total()
 
 
-def add_inventory(request):
-    if "add_inventory" in request.POST:
-        add_inventory_item = request.POST.get('add_inventory')
+def add_inventory(request, item_name):
+
+    if request.method == "POST":
+        add_inventory_item = item_name
         purchased_quantity = int(request.POST.get('quantity'))
 
         item_list = []
@@ -272,7 +269,7 @@ def add_inventory(request):
                 request, f"{ add_inventory_item } only has { item_object.remain } left")
         else:
 
-            if inventory_object is None: # not add to inventory, create new item in inventory
+            if inventory_object is None:  # not add to inventory, create new item in inventory
                 inventory_object = Inventory.objects.create(
                     item_id=item_object.id,
                     user_id=request.user.id,
@@ -289,7 +286,14 @@ def add_inventory(request):
 
                 messages.success(
                     request, f"Add { add_inventory_item } to inventory")
-            else: # already have, just add the quantity to that item
+            else:  # already have, just add the quantity to that item
                 inventory_object.quantity += purchased_quantity
                 inventory_object.save()
-        return redirect("market-page")
+                messages.success(
+                    request, f"Add { add_inventory_item } to inventory")
+
+            return JsonResponse({
+                "success": True,
+            })
+
+    return redirect("market-page")

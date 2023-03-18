@@ -60,7 +60,9 @@
           </li>
 
           <li class="nav-item" style="padding-right: 20px;">
-            <a class="nav-link text-light fw-bold" href="{% url 'dashboard-page' %}">Welcome, {{ user.username }}</a>
+            <span id="tt" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip">
+              <a class="nav-link text-light fw-bold" href="{% url 'dashboard-page' %}">Welcome, {{ user.username }}</a>
+            </span>
           </li>
 
           <li class="nav-item">
@@ -71,35 +73,12 @@
       </div>
       
   </nav>
-  {% if messages %}
-  {% for mess in messages %}
-
-  {% if mess.tags == 'success' %}
-  <div class="mt-5">
-    <div class="alert alert-success alert-dismissible fade show w-100 " role="alert">
-      {{ mess }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  </div>
-
-  {% elif mess.tags == 'error' %}
-  <div class="mt-5">
-    <div class="alert alert-danger alert-dismissible fade show w-100 " role="alert">
-      {{ mess }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  </div>
-
-  {% elif mess.tags == 'info' %}
-  <div class="mt-5">
-    <div class="alert alert-info alert-dismissible fade show w-100" role="alert">
-      {{ mess }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  </div>
-  {% endif %}
-  {% endfor %}
-  {% endif %}
+  <!-- include message.html -->
+  {% block message %}
+  {% include "main/message.html" %}
+  {% endblock message %}
+  
+  
 <br><br><br>
 
   {% block header %}
@@ -111,8 +90,6 @@
     {% endblock content %}
 
   </div>
-
-  <div id="test"></div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
