@@ -10,5 +10,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard_page, name='dashboard-page'),
     path('info/<str:item_name>/', views.info_page, name='info-page'),
     path('review/<str:item_name>/', views.review, name='review-page'),
+    path('add_inventory/<str:item_name>/', views.add_inventory, name='add-inventory-page'),
+    path('cancel_item/<str:cancel_item_pk>/', views.cancel_item, name='cancel-item-page'),
 
 ]

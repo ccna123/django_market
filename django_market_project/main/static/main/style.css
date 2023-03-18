@@ -55,6 +55,9 @@ input#rate-1:checked ~ label{
     cursor: not-allowed !important;
 }
 
+.custom-tooltip {
+    --bs-tooltip-bg: var(--bs-success);
+  }
 @media (max-width:768px) {
     .col-sm-12{
         display: flex;

@@ -4,6 +4,10 @@
 cart Page
 {% endblock title %}
 
+{% block message %}
+<div id="mess_container" class="fixed-top"></div>
+{% endblock message %}
+
 {% block content %}
 <h1 class="m-5 fw-bold">Your items</h1>
 <hr>
@@ -15,51 +19,14 @@ cart Page
     <button class="nav-link" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-controls="inventory" aria-selected="false">Inventory</button>
   </li>
 </ul>
+
+<!-- cart tab -->
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="cart" role="tabpanel" aria-labelledby="cart-tab">
-    <div class="row">
-      {% for item in item_in_inventory %}
-    
-      <div class="col-xl-3 col-lg-4 col-md-3 col-sm-12 my-2">
-        <div class="card text-dark item_card" style="width: 18rem; min-height: 100%;">
-          <img src="{{ item.item.image_url }}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title text-center">{{ item.item.name }}</h5>
-          </div>
-          <hr>
-          <div class="fw-bold text-center h1 price">
-            ${{ item.total_convert }}
-          </div>
-          <div class="container mb-4">
-            <div class="star-widget text-center">
-              <span class="stars">
-                <i class="bi bi-star-fill h4"></i>
-                <i class="bi bi-star-fill h4"></i>
-                <i class="bi bi-star-fill h4"></i>
-                <i class="bi bi-star-fill h4"></i>
-                <i class="bi bi-star-fill h4"></i>
-              </span>
-            </div>
-            <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
-          </div>
-          <div class="text-center">
-            <h5>Quantity: {{ item.quantity }}</h5>
-          </div>
-    
-          <form class="info-form text-center" method="POST">
-            {% csrf_token %}
-            <button type="submit" onclick="window.location.href='/info/{{ item.item.name }}/'" class="btn btn-secondary w-75 mb-4 my-auto fw-bold" name="get_item_info" value="{{ item.item.name }}">
-              Info
-            </button>
-            <button type="submit" class="buy_btn btn btn-success w-75 mb-4 my-auto fw-bold" name="buy_item" value="{{ item.item.pk }}">Purchase</button>
-            <button type="submit" class="btn btn-danger w-75 mb-4 my-auto fw-bold" name="cancel_item" value="{{ item.item.pk }}">Cancel</button>
-          </form>
-        </div> 
-      </div>
-      {% endfor %}
-    
-    </div>
+    {% include "main/cart.html" %}
   </div>
+
+  <!-- inventory tab -->
   <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
     <div class="row">
       {% for item in item_purchased %}
@@ -105,8 +72,8 @@ cart Page
 
 
 {% endblock content %}
-{% comment %} <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
     crossorigin="anonymous"></script>
 {% block javascript %}
-<script type="text/javascript" src="{% static 'main/passing_data.js' %}"></script>
-{% endblock javascript %} {% endcomment %}
+<script type="text/javascript" src="{% static 'main/dashboard_ajax.js' %}"></script>
+{% endblock javascript %} 
