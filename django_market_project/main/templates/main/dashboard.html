@@ -39,7 +39,7 @@ cart Page
           </div>
           <hr>
           <div class="fw-bold text-center h1 price">
-            ${{ item.total_convert }}
+            ${{ item.item.price }}
           </div>
           <div class="container mb-4">
             <div class="star-widget text-center">
@@ -54,7 +54,7 @@ cart Page
             <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
           </div>
           <div class="text-center">
-            <h5>Quantity: {{ item.quantity }}</h5>
+            <h5>Quantity: {{ item.bought_quantity }}</h5>
           </div>
     
           <form class="info-form text-center" method="POST">
