@@ -9,9 +9,6 @@ Market Page
 {% endblock header %}
 
 {% block message %}
-<div id="mess_container">
-  {% include "main/message.html" %}
-</div>
 {% endblock message %}
 
 {% block content %}
@@ -70,7 +67,7 @@ Market Page
             <input class="mb-3 pe-none" type="number" name="quantity" id="quantity" min="1" max="999999" value=1>
             
             <input type="hidden" name="add_inventory" value="{{ item.name }}">
-            <button type="submit" onclick="window.location.href='/info/{{ item.name }}/'" class="btn btn-secondary w-75 mb-4 fw-bold pe-none" name="get_item_info" value="{{ item.name }}">
+            <button type="submit" onclick="window.location.href='/info/{{ item.name }}/'" class="btn btn-primary w-75 mb-4 fw-bold" name="get_item_info" value="{{ item.name }}">
               Info
             </button>
             <button type="submit" class="add_inventory_btn btn btn-secondary w-75 mb-4 fw-bold pe-none">Add Inventory</button>
@@ -78,8 +75,9 @@ Market Page
         </div>
       </div>
       {% else %}
+    
       <form method="post"></form>
-      <div class="card text-dark item_card" style="width: 18rem; min-height: 100%;">
+      <div id="card_{{ item.pk }}" class="card text-dark item_card" style="width: 18rem; min-height: 100%;">
         <img src="{{ item.image_url }}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">{{ item.name }}</h5>
@@ -102,17 +100,17 @@ Market Page
           <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
         </div>
         <div class="text-center">
-          <h5>Remain: {{ item.remain }}</h5>
+          <h5 id="remain_{{ item.pk }}">Remain: {{ item.remain }}</h5>
         </div>
         <div class="text-center">
           <form class="info-form py-4" method="POST">
             {% csrf_token %}
-            <input class="mb-3" type="number" name="quantity" id="quantity" min="1" max="999999" value=1>
+            <input class="mb-3" type="number" name="quantity" id="quantity_{{ item.pk }}" min="1" max="999999" value=1>
             
             <button type="submit" onclick="window.location.href='/info/{{ item.name }}/'" class="btn btn-primary w-75 mb-4 fw-bold" name="get_item_info" value="{{ item.name }}">
               Info
             </button>
-            <button type="submit" class="add_inventory_btn btn btn-success w-75 mb-4 fw-bold" name="item_name" value="{{ item.name }}">
+            <button type="submit" id="add_btn_{{ item.pk }}" class="add_inventory_btn btn btn-success w-75 mb-4 fw-bold" name="item_name" value="{{ item.name }}" data-item-id="{{ item.pk }}">
               Add Inventory
             </button>
           </form>
@@ -120,7 +118,6 @@ Market Page
         
       </div>
       {% endif %}
-
     </div>
     {% endfor %}
 
