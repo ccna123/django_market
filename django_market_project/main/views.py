@@ -106,6 +106,7 @@ def logout_page(request):
 
 def dashboard_page(request):
     if request.method == 'GET':
+        
         item_in_inventory = Inventory.objects.filter(
             user_id=request.user.id, is_in_inventory=True)
         item_purchased = Inventory.objects.filter(
@@ -237,6 +238,8 @@ def buy_item(request, buy_item_id):
         request.user.budget -= inventory_object.get_total()
         inventory_object.is_buying = True
         inventory_object.is_in_inventory = False
+        inventory_object.bought_quantity += inventory_object.quantity
+        inventory_object.quantity = 0
         inventory_object.save()
         request.user.save()
         messages.success(request, f"Buy Successfully")
@@ -290,6 +293,7 @@ def add_inventory(request, item_name):
             else:  # already have, just add the quantity to that item
                 inventory_object.quantity += purchased_quantity
                 item_object.remain -= purchased_quantity
+                inventory_object.is_in_inventory = True
                 inventory_object.save()
                 item_object.save()
                 
