@@ -29,6 +29,13 @@ function getCookie(name) {
     return cookieValue;
   }
 
+  function disable_item(itemId) {
+    $("#card_" + itemId).addClass("disabled");
+    $("#remain_" + itemId).text("SOLD OUT");
+    $("#quantity_" + itemId).addClass("pe-none");
+    $("#add_btn_" + itemId).addClass("pe-none");
+  }
+
   var csrftoken = getCookie('csrftoken');
 
 $(document).ready(function () {
@@ -44,10 +51,12 @@ $(document).ready(function () {
 
     $(".add_inventory_btn").click(function (e) { 
         e.preventDefault();
+        let itemId = $(this).data('item-id');
         const item_name = $(this).val();
         const base_url = window.location.href.split("/").slice(0,3).join("/");
-        const quantity = document.querySelector("#quantity").value;
-
+        const quantity_input = $(this).closest('form').find('input[name="quantity"]');
+        let quantity = quantity_input.val();
+        
         $.ajax({
             type: "POST",
             url: base_url+ "/" + `add_inventory/${item_name}` + "/",
@@ -58,17 +67,32 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (response) {
-
-                $("#tt").attr("title", "Add Successfully");
-                $("#tt").tooltip("dispose").tooltip("show");
-                setTimeout(() => {
-                    $("#tt").tooltip("disable").tooltip("hide");
-                }, 1500);
+                
+                if (response.remain === 0) {
+                    disable_item(itemId);
+                }
+                else{
+                    if (response.success === false) {
+                        alert(`${item_name} only has ${response.remain} left`);
+                        $("#quantity_" + itemId).val(1);
+                    } else {
+                        
+                        $("#remain_" + itemId).text("Remain: " + response.remain);
+                        $("#quantity_" + itemId).val(1);
+                        $("#tt").attr("title", "Add Successfully");
+                        $("#tt").tooltip("dispose").tooltip("show");
+                        setTimeout(() => {
+                            $("#tt").tooltip("disable").tooltip("hide");
+                        }, 1500);
+                    }
+                }
+                
                 
                 
             },
-            error: function(xhr, textStatus, errorThrow) {
-                console.log("Error: " + errorThrow);
+            error: function(xhr, status, error) {
+                console.log(xhr.status);
+                // alert(`${item_name} only has  left`)
             }   
         });
     }); 

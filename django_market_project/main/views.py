@@ -30,8 +30,7 @@ def market_page(request):
                 avg_rating=Avg('inventory__rating_score'))
             items_name = ", ".join([item.name for item in searched_item])
             messages.success(request, f"Search result: {items_name}")
-        else:
-            messages.error(request, "Please enter the item you want to search !")
+
 
         for item in item_rating:
             if item.avg_rating == None:
@@ -265,8 +264,10 @@ def add_inventory(request, item_name):
         inventory_object = Inventory.objects.filter(
             item_id=item_object.id, user_id=request.user.id).first()
         if is_enough_in_store(item_object, purchased_quantity):
-            messages.error(
-                request, f"{ add_inventory_item } only has { item_object.remain } left")
+            return JsonResponse({
+                "success": False,
+                "remain" : item_object.remain
+            })
         else:
 
             if inventory_object is None:  # not add to inventory, create new item in inventory
@@ -288,12 +289,14 @@ def add_inventory(request, item_name):
                     request, f"Add { add_inventory_item } to inventory")
             else:  # already have, just add the quantity to that item
                 inventory_object.quantity += purchased_quantity
+                item_object.remain -= purchased_quantity
                 inventory_object.save()
-                messages.success(
-                    request, f"Add { add_inventory_item } to inventory")
+                item_object.save()
+                
 
             return JsonResponse({
                 "success": True,
+                "remain" : item_object.remain
             })
 
     return redirect("market-page")
