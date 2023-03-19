@@ -5,11 +5,11 @@ cart Page
 {% endblock title %}
 
 {% block message %}
-<div id="mess_container" class="fixed-top"></div>
+
 {% endblock message %}
 
 {% block content %}
-<h1 class="m-5 fw-bold">Your items</h1>
+<h1 class="m-5 fw-bold header_page_title fw-bolder">YOUR ITEMS</h1>
 <hr>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
@@ -59,7 +59,7 @@ cart Page
     
           <form class="info-form text-center" method="POST">
             {% csrf_token %}
-            <button type="submit" onclick="window.location.href='/info/{{ item.item.name }}/'" class="btn btn-secondary w-75 mb-4 my-auto fw-bold" name="get_item_info" value="{{ item.item.name }}">
+            <button type="submit" onclick="window.location.href='/info/{{ item.item.name }}/'" class="btn btn-primary w-75 mb-4 my-auto fw-bold" name="get_item_info" value="{{ item.item.name }}">
               Info
             </button>
           </form>

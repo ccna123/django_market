@@ -92,7 +92,7 @@ $(document).ready(function () {
             },
             error: function(xhr, status, error) {
                 console.log(xhr.status);
-                // alert(`${item_name} only has  left`)
+                alert(`${item_name} only has  left`)
             }   
         });
     }); 

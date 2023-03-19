@@ -6,30 +6,19 @@
 
 {% block message %}
 
-{% if messages %}
-{% for mess in messages %}
-{% if mess.tags == 'success' %}
 
-<div class="mt-5">
-  <div class="alert alert-success alert-dismissible fade show w-100 " role="alert">
-    {{ mess }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-</div>
+{% for k, v in errors %}
 
-
-{% elif mess.tags == 'error' %}
 <div class="mt-5">
   <div class="alert alert-danger alert-dismissible fade show w-100 " role="alert">
-    {{ mess }}
+    {{ v|first }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 </div>
 
 
-{% endif %}
 {% endfor %}
-{% endif %}
+
 
 {% endblock message %}
 
@@ -45,22 +34,31 @@
             </h1>
     
             <!-- Form Fields -->
+            <!-- username -->
             <label for="inputUsername" class="sr-only mb-3">
                 User Name
             </label>
             <input type="text" id="inputUsername" class="form-control" placeholder="User Name" name="username" required autofocus>
             <br>
-    
+
+            <!-- email -->
+            <label for="inputEmail" class="sr-only mb-3">
+                Email
+            </label>
+            <input type="email" id="inputEmai" class="form-control" placeholder="Email" name="email" required autofocus>
+            <br>
+            
+            <!-- password -->
             <label for="inputPassword1" class="sr-only mb-3">
                 Password
             </label>
-            <input type="password" id="inputPassword1" class="form-control" placeholder="Password" name="password1" required autofocus>
+            <input type="password" id="inputPassword1" class="form-control" placeholder="Password" name="password" required autofocus>
             <br>
     
             <label for="inputPassword2" class="sr-only mb-3">
                 Password Confirmation
             </label>
-            <input type="password" id="inputPassword2" class="form-control" placeholder="Confirm Password" name="password2" required autofocus>
+            <input type="password" id="inputPassword2" class="form-control" placeholder="Confirm Password" name="confirm_password" required autofocus>
             <br>
     
             <div class="checkbox mb-3">

@@ -4,12 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from main.forms import CustomUserCreationForm
+from main.forms import RegisterForm
 from django.core.paginator import Paginator
-from urllib.parse import urlencode, quote
-from django.http import JsonResponse, HttpResponseRedirect
-from django.db.models import Avg, Q
+from django.http import JsonResponse
+from django.db.models import Avg
 from django.template.loader import render_to_string
+import json
+from urllib.parse import urlencode
 
 
 def home_page(request):
@@ -66,19 +67,23 @@ def register_page(request):
         return render(request, template_name='main/register_page.html')
 
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
+
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+ 
             user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, f"Successfully register")
             return redirect('home-page')
         else:
-            print(form.errors)
-            messages.error(request, f"Error occured")
-            return redirect("register-page")
+            
+           errors = form.errors.items()
+           for k, v in errors:
+               print(v[0])
+           return render(request, template_name="main/register_page.html", context={"errors": errors})
 
 
 def login_page(request):
@@ -94,7 +99,7 @@ def login_page(request):
             messages.success(request, f"Successfully login")
             return redirect("market-page")
         else:
-            messages.error(request, f"Login failed")
+            messages.error(request, "Failed. Check username and password")
             return render(request, template_name='main/login_page.html')
 
 
@@ -261,7 +266,6 @@ def add_inventory(request, item_name):
         add_inventory_item = item_name
         purchased_quantity = int(request.POST.get('quantity'))
 
-        item_list = []
 
         item_object = Item.objects.filter(name=add_inventory_item).first()
         inventory_object = Inventory.objects.filter(
@@ -282,7 +286,6 @@ def add_inventory(request, item_name):
                     comments="",
                     quantity=purchased_quantity
                 )
-                item_list.append(item_object)
                 item_object.remain -= purchased_quantity
 
                 item_object.save()

@@ -55,6 +55,12 @@ input#rate-1:checked ~ label{
     cursor: not-allowed !important;
 }
 
+.header_page_title{
+    color: goldenrod;
+}
+
+
+
 .custom-tooltip {
     --bs-tooltip-bg: var(--bs-success);
   }
@@ -65,6 +71,5 @@ input#rate-1:checked ~ label{
         justify-content: center;
         padding-bottom: 3rem;
     }
-
 
 }
