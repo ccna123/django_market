@@ -113,14 +113,12 @@ def dashboard_page(request):
         
         item_in_inventory = Inventory.objects.filter(
             user_id=request.user.id, is_in_inventory=True)
-        # item_purchased = Inventory.objects.filter(
-        #     user_id=request.user.id, is_in_inventory=False, is_buying=True)
 
         return render(request,
                       template_name='main/dashboard.html',
                       context={
                           "item_in_inventory": item_in_inventory
-                        #   "item_purchased": item_purchased
+
                       })
 
     if request.method == 'POST':
@@ -128,10 +126,6 @@ def dashboard_page(request):
         if "get_item_info" in request.POST:
             get_item_info = request.POST.get("get_item_info")
             return info_page(request, get_item_info)
-
-        # elif "buy_item" in request.POST:
-        #     buy_item_id = request.POST.get("buy_item")
-        #     return buy_item(request, buy_item_id)
 
         elif "cancel_item_name" in request.POST:
             return cancel_item(request, request.POST.get("cancel_item_name"))
@@ -229,51 +223,6 @@ def cancel_item(request, cancel_item_pk):
         })
 
 
-# def is_enough_in_store(item_object, purchased_quantity):
-#     return item_object.remain < purchased_quantity
-
-
-# def buy_item(request, buy_item_id):
-
-<<<<<<< HEAD
-    inventory_object = Inventory.objects.filter(
-        user_id=request.user.id, item_id=buy_item_id).first()
-    if can_buy_item(request, buy_item_id):
-        request.user.budget -= inventory_object.get_total()
-        inventory_object.is_buying = True
-        inventory_object.is_in_inventory = False
-        inventory_object.bought_quantity += inventory_object.quantity
-        inventory_object.quantity = 0
-        inventory_object.save()
-        request.user.save()
-        messages.success(request, f"Buy Successfully")
-        return redirect("dashboard-page")
-    else:
-        messages.error(request, f"Not enough budget")
-        return redirect("dashboard-page")
-=======
-#     inventory_object = Inventory.objects.filter(
-#         user_id=request.user.id, item_id=buy_item_id).first()
-#     if can_buy_item(request, buy_item_id):
-#         request.user.budget -= inventory_object.get_total()
-#         inventory_object.is_buying = True
-#         inventory_object.is_in_inventory = False
-#         inventory_object.save()
-#         request.user.save()
-#         messages.success(request, f"Buy Successfully")
-#         return redirect("dashboard-page")
-#     else:
-#         messages.error(request, f"Not enough budget")
-#         return redirect("dashboard-page")
->>>>>>> test
-
-
-# def can_buy_item(request, buy_item_id):
-#     inventory_object = Inventory.objects.filter(
-#         user_id=request.user.id, item_id=buy_item_id).first()
-#     return request.user.budget > inventory_object.get_total()
-
-
 def add_inventory(request, item_name):
 
     if request.method == "POST":
@@ -294,27 +243,16 @@ def add_inventory(request, item_name):
                     comments="",
                     # quantity=purchased_quantity
                 )
-<<<<<<< HEAD
-                item_object.remain -= purchased_quantity
-=======
-          
->>>>>>> test
 
                 item_object.save()
                 inventory_object.save()
 
                 messages.success(
                     request, f"Add { add_inventory_item } to inventory")
-<<<<<<< HEAD
-            else:  # already have, just add the quantity to that item
-                inventory_object.quantity += purchased_quantity
-                item_object.remain -= purchased_quantity
-                inventory_object.is_in_inventory = True
-=======
+
         else:  # already have, just add the quantity to that item
                
                 
->>>>>>> test
                 inventory_object.save()
                 item_object.save()
 

@@ -29,11 +29,6 @@ class Inventory(models.Model):
     
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-<<<<<<< HEAD
-    quantity = models.IntegerField(blank=True, null=True)
-    bought_quantity = models.IntegerField(blank=True, default=0)
-=======
->>>>>>> test
     rating_score = models.IntegerField(blank=True, default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     comments = models.CharField(max_length=1024, blank=True, null=True)
     is_in_inventory = models.BooleanField(default=False)

@@ -54,15 +54,12 @@ $(document).ready(function () {
         let itemId = $(this).data('item-id');
         const item_name = $(this).val();
         const base_url = window.location.href.split("/").slice(0,3).join("/");
-        // const quantity_input = $(this).closest('form').find('input[name="quantity"]');
-        // let quantity = quantity_input.val();
         
         $.ajax({
             type: "POST",
             url: base_url+ "/" + `add_inventory/${item_name}` + "/",
             data: {
                 item_name:item_name,
-                // quantity:quantity,
                 csrfmiddlewaretoken: csrftoken
             },
             dataType: "json",
