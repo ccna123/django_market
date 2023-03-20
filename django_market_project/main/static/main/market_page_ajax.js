@@ -30,10 +30,10 @@ function getCookie(name) {
   }
 
   function disable_item(itemId) {
-    $("#card_" + itemId).addClass("disabled");
-    $("#remain_" + itemId).text("SOLD OUT");
-    $("#quantity_" + itemId).addClass("pe-none");
-    $("#add_btn_" + itemId).addClass("pe-none");
+    // $("#card_" + itemId).addClass("disabled");
+    // $("#remain_" + itemId).text("SOLD OUT");
+    // $("#quantity_" + itemId).addClass("pe-none");
+    // $("#add_btn_" + itemId).addClass("pe-none");
   }
 
   var csrftoken = getCookie('csrftoken');
@@ -54,38 +54,25 @@ $(document).ready(function () {
         let itemId = $(this).data('item-id');
         const item_name = $(this).val();
         const base_url = window.location.href.split("/").slice(0,3).join("/");
-        const quantity_input = $(this).closest('form').find('input[name="quantity"]');
-        let quantity = quantity_input.val();
+        // const quantity_input = $(this).closest('form').find('input[name="quantity"]');
+        // let quantity = quantity_input.val();
         
         $.ajax({
             type: "POST",
             url: base_url+ "/" + `add_inventory/${item_name}` + "/",
             data: {
                 item_name:item_name,
-                quantity:quantity,
+                // quantity:quantity,
                 csrfmiddlewaretoken: csrftoken
             },
             dataType: "json",
             success: function (response) {
                 
-                if (response.remain === 0) {
-                    disable_item(itemId);
-                }
-                else{
-                    if (response.success === false) {
-                        alert(`${item_name} only has ${response.remain} left`);
-                        $("#quantity_" + itemId).val(1);
-                    } else {
-                        
-                        $("#remain_" + itemId).text("Remain: " + response.remain);
-                        $("#quantity_" + itemId).val(1);
-                        $("#tt").attr("title", "Add Successfully");
-                        $("#tt").tooltip("dispose").tooltip("show");
-                        setTimeout(() => {
-                            $("#tt").tooltip("disable").tooltip("hide");
-                        }, 1500);
-                    }
-                }
+                $("#tt").attr("title", "Add Successfully");
+                $("#tt").tooltip("dispose").tooltip("show");
+                setTimeout(() => {
+                    $("#tt").tooltip("disable").tooltip("hide");
+                }, 1500);
                 
                 
                 

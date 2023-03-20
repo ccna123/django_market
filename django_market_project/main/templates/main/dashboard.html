@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %}
-cart Page
+Pocket
 {% endblock title %}
 
 {% block message %}
@@ -13,19 +13,17 @@ cart Page
 <hr>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="cart-tab" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab" aria-controls="cart" aria-selected="true">Cart</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-controls="inventory" aria-selected="false">Inventory</button>
+    <button class="nav-link active" id="pocket-tab" data-bs-toggle="tab" data-bs-target="#pocket" type="button" role="tab" aria-controls="pocket" aria-selected="true">Pocket</button>
   </li>
 </ul>
 
-<!-- cart tab -->
+<!-- pocket tab -->
 <div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+  <div class="tab-pane fade show active" id="pocket" role="tabpanel" aria-labelledby="pocket-tab">
     {% include "main/cart.html" %}
   </div>
 
+<<<<<<< HEAD
   <!-- inventory tab -->
   <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
     <div class="row">
@@ -68,6 +66,8 @@ cart Page
       {% endfor %}
     </div>
   </div>
+=======
+>>>>>>> test
 </div>
 
 

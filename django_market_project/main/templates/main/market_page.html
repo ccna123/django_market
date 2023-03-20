@@ -36,47 +36,7 @@ Market Page
   <div class="row">
     {% for item in item_per_page %}
     <div class="col-xl-3 col-lg-4 col-md-3 col-sm-12">
-      {% if item.remain == 0 %}
-      <div class="card disabled text-dark item_card" style="width: 18rem; min-height: 100%;">
-        <img src="{{ item.image_url }}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">{{ item.name }}</h5>
-        </div>
-        <hr>
-        <div class="fw-bold text-center h1 price">
-          ${{ item.price_convert }}
-        </div>
-        
-        <div class="container mb-4">
-          <div class="star-widget text-center">
-            <span class="stars">
-              <i class="bi bi-star-fill h4"></i>
-              <i class="bi bi-star-fill h4"></i>
-              <i class="bi bi-star-fill h4"></i>
-              <i class="bi bi-star-fill h4"></i>
-              <i class="bi bi-star-fill h4"></i>
-            </span>
-          </div>
-          <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
-        </div>
-        <div class="text-center">
-          <h5>SOLD OUT</h5>
-        </div>
-        <div class="text-center">
-          <form class="info-form py-4" action="{% url 'market-page' %}"  method="POST">
-            {% csrf_token %}
-            <input class="mb-3 pe-none" type="number" name="quantity" id="quantity" min="1" max="999999" value=1>
-            
-            <input type="hidden" name="add_inventory" value="{{ item.name }}">
-            <button type="submit" onclick="window.location.href='/info/{{ item.name }}/'" class="btn btn-primary w-75 mb-4 fw-bold" name="get_item_info" value="{{ item.name }}">
-              Info
-            </button>
-            <button type="submit" class="add_inventory_btn btn btn-secondary w-75 mb-4 fw-bold pe-none">Add Inventory</button>
-          </form>
-        </div>
-      </div>
-      {% else %}
-    
+      
       <form method="post"></form>
       <div id="card_{{ item.pk }}" class="card text-dark item_card" style="width: 18rem; min-height: 100%;">
         <img src="{{ item.image_url }}" class="card-img-top" alt="...">
@@ -84,10 +44,7 @@ Market Page
           <h5 class="card-title">{{ item.name }}</h5>
         </div>
         <hr>
-        <div class="fw-bold text-center h1 price">
-          ${{ item.price_convert }}
-        </div>
-        
+      
         <div class="container mb-4">
           <div class="star-widget text-center">
             <span class="stars">
@@ -100,9 +57,7 @@ Market Page
           </div>
           <input type="hidden" name="" class="avg_rating" value="{{ item.avg_rating }}">
         </div>
-        <div class="text-center">
-          <h5 id="remain_{{ item.pk }}">Remain: {{ item.remain }}</h5>
-        </div>
+
         <div class="text-center">
           <form class="info-form py-4" method="POST">
             {% csrf_token %}
@@ -112,13 +67,11 @@ Market Page
               Info
             </button>
             <button type="submit" id="add_btn_{{ item.pk }}" class="add_inventory_btn btn btn-success w-75 mb-4 fw-bold" name="item_name" value="{{ item.name }}" data-item-id="{{ item.pk }}">
-              Add Inventory
+              Add Pocket
             </button>
           </form>
         </div>
-        
       </div>
-      {% endif %}
     </div>
     {% endfor %}
 
