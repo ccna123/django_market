@@ -6,3 +6,4 @@ django_market_project/main/__pycache__/forms.cpython-39.pyc
 *.sqlite3
 *.pyc
 >>>>>>> test
+*.sqlite3
