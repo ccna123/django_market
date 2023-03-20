@@ -14,25 +14,38 @@ Info page
 {% block content %}
 
 <div class="container text-center">
-    <div class="card-wrapper justify-content-center d-flex">
-        <div class="card" style="width: 30rem;">
-            <img class="card-img-top" src="{{ item_object.image_url }}" alt="Card image cap">
-            <div class="card-body d-flex justify-content-around h1">
-                <div>
-                    <div class="fw-bold">Age</div>
-                    <div class="fw-bold">Origin</div>
-                    <div class="fw-bold">Remain</div>
+    <div class="row">
+        <!-- item -->
+        <div class="col-12 col-md-6 col-lg-6">
+            <div class="card-wrapper justify-content-center d-flex">
+                <div class="card" style="width: 30rem;">
+                    <img class="card-img-top" src="{{ item_object.image_url }}" alt="Card image cap">
+                    <div class="card-body d-flex justify-content-around h1">
+                        <div>
+                            <div class="fw-bold">Age</div>
+                            <div class="fw-bold">Origin</div>
+                            <div class="fw-bold">Remain</div>
+                        </div>
+                        <div>
+                            <div>{{ item_object.age }}</div>
+                            <div>{{ item_object.origin }}</div>
+                            <div>{{ item_object.remain }}</div>
+                        </div>
+
+                    </div>
                 </div>
-                <div>
-                    <div>{{ item_object.age }}</div>
-                    <div>{{ item_object.origin }}</div>
-                    <div>{{ item_object.remain }}</div>
-                </div>
-    
             </div>
         </div>
+        <!-- end item -->
+
+        <!-- video -->
+        <div class="col-12 col-md-6 col-lg-6">
+            <iframe width="560" height="496" src="https://www.youtube.com/embed/7Ron6MN45LY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <!-- end video -->
     </div>
-    
+
+
 
     <div class="row rounded border border-success m-4 p-4 card" style="background-color: #86C8BC;">
         <div class="col-12">
@@ -58,7 +71,7 @@ Info page
                     </div>
 
                     <div class="form-group mt-4" style="background-color: #A3BB98;">
-                        
+
                         <textarea name="review_area" class="form-control" style="resize: none;" id="review_area"
                             rows="4" placeholder="Write your review"></textarea>
                     </div>
