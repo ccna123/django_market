@@ -31,7 +31,6 @@ def market_page(request):
             items_name = ", ".join([item.name for item in searched_item])
             messages.success(request, f"Search result: {items_name}")
 
-
         for item in item_rating:
             if item.avg_rating == None:
                 item.avg_rating = 0
@@ -108,14 +107,14 @@ def dashboard_page(request):
     if request.method == 'GET':
         item_in_inventory = Inventory.objects.filter(
             user_id=request.user.id, is_in_inventory=True)
-        item_purchased = Inventory.objects.filter(
-            user_id=request.user.id, is_in_inventory=False, is_buying=True)
+        # item_purchased = Inventory.objects.filter(
+        #     user_id=request.user.id, is_in_inventory=False, is_buying=True)
 
         return render(request,
                       template_name='main/dashboard.html',
                       context={
-                          "item_in_inventory": item_in_inventory,
-                          "item_purchased": item_purchased
+                          "item_in_inventory": item_in_inventory
+                        #   "item_purchased": item_purchased
                       })
 
     if request.method == 'POST':
@@ -124,13 +123,13 @@ def dashboard_page(request):
             get_item_info = request.POST.get("get_item_info")
             return info_page(request, get_item_info)
 
-        elif "buy_item" in request.POST:
-            buy_item_id = request.POST.get("buy_item")
-            return buy_item(request, buy_item_id)
+        # elif "buy_item" in request.POST:
+        #     buy_item_id = request.POST.get("buy_item")
+        #     return buy_item(request, buy_item_id)
 
         elif "cancel_item_name" in request.POST:
             return cancel_item(request, request.POST.get("cancel_item_name"))
-    print("hahaha")
+
     return redirect("dashboard-page")
 
 
@@ -205,10 +204,9 @@ def review(request, item_name):
 def cancel_item(request, cancel_item_pk):
 
     if request.method == "POST":
-        
+
         inventory_object = Inventory.objects.filter(
             item_id=cancel_item_pk, user_id=request.user.id).first()
-        inventory_object.item.remain += inventory_object.quantity
         messages.success(request, "Cancel Successfully")
         inventory_object.item.save()
         inventory_object.delete()
@@ -225,78 +223,68 @@ def cancel_item(request, cancel_item_pk):
         })
 
 
-def is_enough_in_store(item_object, purchased_quantity):
-    return item_object.remain < purchased_quantity
+# def is_enough_in_store(item_object, purchased_quantity):
+#     return item_object.remain < purchased_quantity
 
 
-def buy_item(request, buy_item_id):
+# def buy_item(request, buy_item_id):
 
-    inventory_object = Inventory.objects.filter(
-        user_id=request.user.id, item_id=buy_item_id).first()
-    if can_buy_item(request, buy_item_id):
-        request.user.budget -= inventory_object.get_total()
-        inventory_object.is_buying = True
-        inventory_object.is_in_inventory = False
-        inventory_object.save()
-        request.user.save()
-        messages.success(request, f"Buy Successfully")
-        return redirect("dashboard-page")
-    else:
-        messages.error(request, f"Not enough budget")
-        return redirect("dashboard-page")
+#     inventory_object = Inventory.objects.filter(
+#         user_id=request.user.id, item_id=buy_item_id).first()
+#     if can_buy_item(request, buy_item_id):
+#         request.user.budget -= inventory_object.get_total()
+#         inventory_object.is_buying = True
+#         inventory_object.is_in_inventory = False
+#         inventory_object.save()
+#         request.user.save()
+#         messages.success(request, f"Buy Successfully")
+#         return redirect("dashboard-page")
+#     else:
+#         messages.error(request, f"Not enough budget")
+#         return redirect("dashboard-page")
 
 
-def can_buy_item(request, buy_item_id):
-    inventory_object = Inventory.objects.filter(
-        user_id=request.user.id, item_id=buy_item_id).first()
-    return request.user.budget > inventory_object.get_total()
+# def can_buy_item(request, buy_item_id):
+#     inventory_object = Inventory.objects.filter(
+#         user_id=request.user.id, item_id=buy_item_id).first()
+#     return request.user.budget > inventory_object.get_total()
 
 
 def add_inventory(request, item_name):
 
     if request.method == "POST":
         add_inventory_item = item_name
-        purchased_quantity = int(request.POST.get('quantity'))
+        # purchased_quantity = int(request.POST.get('quantity'))
 
-        item_list = []
 
         item_object = Item.objects.filter(name=add_inventory_item).first()
         inventory_object = Inventory.objects.filter(
             item_id=item_object.id, user_id=request.user.id).first()
-        if is_enough_in_store(item_object, purchased_quantity):
-            return JsonResponse({
-                "success": False,
-                "remain" : item_object.remain
-            })
-        else:
 
-            if inventory_object is None:  # not add to inventory, create new item in inventory
+        if inventory_object is None:  # not add to inventory, create new item in inventory
                 inventory_object = Inventory.objects.create(
                     item_id=item_object.id,
                     user_id=request.user.id,
                     is_in_inventory=True,
                     rating_score=0,
                     comments="",
-                    quantity=purchased_quantity
+                    # quantity=purchased_quantity
                 )
-                item_list.append(item_object)
-                item_object.remain -= purchased_quantity
+          
 
                 item_object.save()
                 inventory_object.save()
 
                 messages.success(
                     request, f"Add { add_inventory_item } to inventory")
-            else:  # already have, just add the quantity to that item
-                inventory_object.quantity += purchased_quantity
-                item_object.remain -= purchased_quantity
+        else:  # already have, just add the quantity to that item
+               
+                
                 inventory_object.save()
                 item_object.save()
-                
 
-            return JsonResponse({
+        return JsonResponse({
                 "success": True,
-                "remain" : item_object.remain
             })
 
     return redirect("market-page")
