@@ -61,7 +61,6 @@ Market Page
         <div class="text-center">
           <form class="info-form py-4" method="POST">
             {% csrf_token %}
-            <input class="mb-3" type="number" name="quantity" id="quantity_{{ item.pk }}" min="1" max="999999" value=1>
             
             <button type="submit" onclick="window.location.href='/info/{{ item.name }}/'" class="btn btn-primary w-75 mb-4 fw-bold" name="get_item_info" value="{{ item.name }}">
               Info
